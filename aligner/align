@@ -24,14 +24,17 @@ if opts.alg == "model1":
   sys.stderr.write("Training with IBM Model 1...\n")
 elif opts.alg == "dice":
   aligner = Dice(opts.threshold)
-  sys.stderr.write("Training with Dice's coefficient...")
+  sys.stderr.write("Training with Dice's coefficient...\n")
   
 bitext = [[sentence.strip().split() for sentence in pair] for pair in zip(open(f_data), open(e_data))[:opts.num_sents]]
 aligner.train(bitext)
 
 for pair in bitext:
   alignment = aligner.align(pair)
-  for (i, j) in alignment:
-    sys.stdout.write("%i-%i " % (i,j))
-  sys.stdout.write("\n")
+  try:
+    for (i, j) in alignment:
+      sys.stdout.write("%i-%i " % (i,j))
+    sys.stdout.write("\n")
+  except IOError:
+    pass # ignore, something like head is truncating output
 
