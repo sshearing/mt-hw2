@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import optparse
+import math
 import sys
 from collections import defaultdict
 
@@ -14,6 +15,59 @@ optparser.add_option("-a", "--algorithm", dest="alg", default="em", choices=["em
 f_data = "%s.%s" % (opts.train, opts.french)
 e_data = "%s.%s" % (opts.train, opts.english)
 
+sys.stderr.write("Training with IBM Model 1...\n")
+bitext = [[sentence.strip().split() for sentence in pair] for pair in zip(open(f_data), open(e_data))[:opts.num_sents]]
+
+# initialize t probabilities to uniform values
+e_words = set([e_word for (f, e) in bitext for e_word in e])
+f_words = set([f_word for (f, e) in bitext for f_word in f])
+t = defaultdict(lambda: float(len(e_words) * len(f_words)))
+
+
+old = float("inf")
+convergent = False
+while not convergent:
+
+  # initialize
+  count = defaultdict(float)
+  total = defaultdict(float)
+
+  for (f, e) in bitext:
+
+    # compute normalization
+    s_total = defaultdict(float)
+    for e_i in e:
+      for f_j in f:
+        s_total[e_i] += t[(e_i, f_j)]
+
+    # collect counts
+    for e_i in e:
+      for f_j in f:
+        count[(e_i, f_j)] += t[(e_i, f_j)] / s_total[e_i]
+        total[f_j] += t[(e_i, f_j)] / s_total[e_i]
+
+  # estimate probabilities
+  for f in f_words:
+    for e in e_words:
+      t[(e, f)] = count[(e, f)] / total[f]
+        
+  # calculate perplexity
+  perp = 0.0
+  for (f, e) in bitext:
+    perp += -1.0 * math.log(1.0 / (len(f) + 1) ** len(e) * reduce(lambda x, y: x * y, [sum([t[(e_j, f_i)] for f_i in f]) for e_j in e]) / math.log(2))
+
+  # check to see if we have converged
+  if perp < old:
+    old = perp
+  else:
+    convergent = True
+    
+  sys.stderr.write(".")
+    
+        
+  
+
+'''
 sys.stderr.write("Training with Dice's coefficient...")
 bitext = [[sentence.strip().split() for sentence in pair] for pair in zip(open(f_data), open(e_data))[:opts.num_sents]]
 f_count = defaultdict(int)
@@ -42,3 +96,4 @@ for (f, e) in bitext:
       if dice[(f_i,e_j)] >= opts.threshold:
         sys.stdout.write("%i-%i " % (i,j))
   sys.stdout.write("\n")
+'''
