@@ -14,13 +14,14 @@ optparser.add_option("-f", "--french", dest="french", default="f", help="Suffix 
 optparser.add_option("-t", "--threshold", dest="threshold", default=0.5, type="float", help="Threshold for aligning with Dice's coefficient (default=0.5)")
 optparser.add_option("-n", "--num_sentences", dest="num_sents", default=sys.maxint, type="int", help="Number of sentences to use for training and alignment")
 optparser.add_option("-a", "--algorithm", dest="alg", default="model1", choices=["model1", "dice"], help="Choice of algorithm to use for alignment")
+optparser.add_option("-i", "--iterations", dest="iters", default=5, type="int", help="Number of iterations to use for appropriate algorithms.")
 (opts, _) = optparser.parse_args()
 f_data = "%s.%s" % (opts.train, opts.french)
 e_data = "%s.%s" % (opts.train, opts.english)
 
 aligner = None
 if opts.alg == "model1":
-  aligner = Model1()
+  aligner = Model1(opts.iters)
   sys.stderr.write("Training with IBM Model 1...\n")
 elif opts.alg == "dice":
   aligner = Dice(opts.threshold)

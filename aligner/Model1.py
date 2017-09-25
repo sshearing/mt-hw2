@@ -4,8 +4,9 @@ from collections import defaultdict
 
 class Model1(Aligner):
 
-    def __init__(self):
+    def __init__(self, iterations):
         self.t = defaultdict(int)
+        self.iterations = iterations
         
     # train an IBM Model1 Word Aligner
     def train(self, bitext):
@@ -22,10 +23,7 @@ class Model1(Aligner):
             for f in pairs[e]:
                 self.t[(e, f)] = 1.0 / float(len(pairs[e]))
 
-        old = float("inf")
-        convergent = False
-        n = 0
-        while not convergent:
+        for epoch in range(self.iterations):
 
             # initialize
             count = defaultdict(float)
@@ -49,19 +47,6 @@ class Model1(Aligner):
             for e in pairs:
                 for f in pairs[e]:
                     self.t[(e, f)] = count[(e, f)] / total[f]
-        
-            # calculate perplexity
-            # perp = 0.0
-            # for (f, e) in bitext:
-             #   perp += -1.0 * math.log(1.0 / (len(f) + 1) ** len(e) * reduce(lambda x, y: x * y, [sum([self.t[(e_j, f_i)] for f_i in f]) for e_j in e]) / math.log(2))
-
-            # check to see if we have converged
-            # if perp + 0.1 < old:
-             #   old = perp
-            #else:
-            if n == 20:
-                convergent = True
-            n += 1
 
     # given a sentence, output most probable alignment
     def align(self, (f, e)):
