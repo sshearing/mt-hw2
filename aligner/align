@@ -35,6 +35,6 @@ for pair in bitext:
     for (i, j) in alignment:
       sys.stdout.write("%i-%i " % (i,j))
     sys.stdout.write("\n")
-  except IOError:
-    pass # ignore, something like head is truncating output
+  except IOError: # only an issue with piping to head
+    pass
 

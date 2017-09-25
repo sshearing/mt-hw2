@@ -73,7 +73,9 @@ class Model1(Aligner):
                 if self.t[(e_j, f_i)] > best_prob:
                     best_prob = self.t[(e_j, f_i)]
                     best_i = i
+                elif self.t[(e_j, f_i)] == best_prob and abs(j - i) < abs(j - best_i):
+                    best_prob = self.t[(e_j, f_i)]
+                    best_i = i
             alignment.append((best_i, j))
                 
-            # a.append((j, max(enumerate([self.t[(e_j, f_i)] for f_i in f]), key=lambda item:item[1])[0]))
         return alignment
