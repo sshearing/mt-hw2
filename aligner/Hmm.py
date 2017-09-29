@@ -33,14 +33,14 @@ class HMM(Aligner):
             for (f, e) in bitext:
                 a = self.align((f, e))
                 for i in range(len(a) - 1):
-                    s[abs(a[i+1][0] - a[i][0])] += 1.0 / len(e)
+                    s[a[i][0] - a[i+1][0]] += 1.0
             
             # estimate transition probabilities
             for I in range(1, max([len(f) for (f, e) in bitext])):
                 for j in range(I):
                     total = sum([s[k - j] for k in range(I)])
                     for i in range(I):
-                        self.tt[(i, j, I)] = s[abs(i - j)] / total
+                        self.tt[(i, j, I)] = s[i - j] / total
         
     # train translation probabilities
     def initialization(self, bitext):
