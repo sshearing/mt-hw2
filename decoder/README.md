@@ -1,3 +1,12 @@
+New decoder algorithms have been implemented.
+The -d command line option lets you choose between them
+-d monotone is the provided algorithm
+-d baseline implements the required adjacent word swap
+-d reorder implements a limited reorder stack decoder
+   -r lets you choose reorder limit (default 5)
+   -e lets you choose threshold for threshold pruning
+-d coverage implements a coverage stack decoder with reorder limit and pruning
+
 There are two python programs here (-h for usage):
 
 -`decode` translates input sentences from French to English.
