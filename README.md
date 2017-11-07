@@ -1,4 +1,4 @@
-Steven Shearing's Phrase Based Machine Translation Asignments
+Steven Shearing's Phrase Based MT Asignments
 =================
 **Decoding Alignment for Machine Translation**
 
