@@ -14,15 +14,15 @@ Due October 19th, 2017
 
 Decoding is process of taking input in French:
 
-_<center>
+<center>
 honorables sénateurs , que se est - il passé ici , mardi dernier ?
-</center>_
+</center>
 
 ...And finding its best English translation under your  model:
 
-_<center>
+<center>
 honourable senators , what happened here last Tuesday ?
-</center>_
+</center>
 
 To decode, we need a model of English sentences conditioned on the
 French sentence. You did most of the work of creating
