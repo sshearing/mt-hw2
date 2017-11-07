@@ -1,11 +1,4 @@
-New decoder algorithms have been implemented.
-The -d command line option lets you choose between them
--d monotone is the provided algorithm
--d baseline implements the required adjacent word swap
--d reorder implements a limited reorder stack decoder
-   -r lets you choose reorder limit (default 5)
-   -e lets you choose threshold for threshold pruning
--d coverage implements a coverage stack decoder with reorder limit and pruning
+New decoder algorithms have been implemented. The -d command line option lets you choose between them. The options for -d are (monotone, baseline, reorder, coverage), where monotone is the provided algorithm, baseline implements adjacent word swap, reorder implements a limited reorder stack decoder, and coverage implements a coverage stack decoder. For the last two models, -r lets you choose the reorder limit, and -e lets you choose threshold for threshold pruning.
 
 There are two python programs here (-h for usage):
 
